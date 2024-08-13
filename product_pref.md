@@ -41,7 +41,7 @@ The derivation is presented in Appendix 1.
 Let $p$ represent the probability that a randomly selected consumer chooses either product $A_i$ or $A_j$. Then, if there are $n$ consumers, in $np$ times, a consumer will choose either $A_i$ or $A_j$. Let $n_i$ and $n_j$ represent the number of times that a consumer chooses $A_i$ and $A_j$ respectively.
 $$
 \begin{align*}
-np\ p_{i, j} &= n_i\\
+np\ p_{i, j} &= n_i\\\\
 np\ p_{j, i} &= n_j.
 \end{align*}
 $$
@@ -66,9 +66,9 @@ $$
 We can substitute the likelihood ratios into this equation to form:
 $$
 \begin{align*}
-& p_0 + k_{1,0} p_0 + \cdots + k_{n,0} p_0 &= 1\\
-& \cdots\\
-& k_{0,n} p_n + k_{1,n} p_n + \cdots + p_n &= 1\\
+& p_0 + k_{1,0} p_0 + \cdots + k_{n,0} p_0 &= 1\\\\
+& \cdots\\\\
+& k_{0,n} p_n + k_{1,n} p_n + \cdots + p_n &= 1\\\\
 \end{align*}
 $$
 We can easily solve these equations to calculate the absolute probability that a consumer will choose a each product. For example:
@@ -113,6 +113,8 @@ Based on these factor values, we can use (1) to calculate the score distribution
     init-products-scores)
 }}| {{data:local[0]}} | {{data:local[1][0]}} | {{expr:(num->string (get-data "local[1][1]") 4)}} |
 {{/each-expr}}
+> **Table 3: Example Product Quality Scores.** This table presents probability distribution parameters for example product quality scores (utilities).
+
  Once we have derived the distributions for the product quality scores, we can calculate the probability $p_{i,j}$ that a randomly selected consumer will choose one product over another for each pair of products $A_i$ and $A_j$ using (3). We can record these probabilities in a matrix like the following
 $$
 \begin{align*}
@@ -145,7 +147,7 @@ $$
         (num->string (vector-ref init-products-market-shares i) 4)
         (vector->list (vector-map (lambda (y) (num->string y 4)) x))))
     (matrix-transpose init-products-ratios))
-}}$A_{{data:local[0]}}$ &= \frac{1}{ {{data:local[2]}} + {{data:local[3]}} + {{data:local[4]}} } = {{data:local[1]}}\\\\
+}}A_{{data:local[0]}} &= \frac{1}{ {{data:local[2]}} + {{data:local[3]}} + {{data:local[4]}} } = {{data:local[1]}}\\\\
 {{/each-expr}}
 \end{align*}
 $$
@@ -155,7 +157,7 @@ Let's assume that the market size consists of {{expr:(assert (= num-units 1e7)) 
 $$
 \begin{align*}
 price = 5 (e^{priceScore/10} - 1)
-\end{align}{{expr:(assert (= (get-price-amount 1) 0.5258545903782386)) ""}}
+\end{align*}{{expr:(assert (= (get-price-amount 1) 0.5258545903782386)) ""}}
 $$
 Then each product has the following gross earnings
 
@@ -164,8 +166,9 @@ Then each product has the following gross earnings
 | $A_0$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 0) 2)}} |
 | $A_1$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 1) 2)}} |
 | $A_2$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 2) 2)}} |
+> **Table 4: Example Product Gross Earnings.** This table presents example gross earnings for a set of hypothetical products.
 
-However, our model indicates that the company that manufactures $A_1$ will actually maximize their gross earnings if they can reduce their price from ${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref init-products 1)) 0)) 2)}} to ${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref modified-products 1)) 0)) 2)}}.
+However, our model indicates that the company that manufactures $A_1$ will actually maximize their gross earnings if they can reduce their price from \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref init-products 1)) 0)) 2)}} to \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref modified-products 1)) 0)) 2)}}.
 Doing so will increase their market share to {{expr:(num->string (* 100 (vector-ref modified-products-market-shares 1)) 2)}}% and increase their gross earnings to ${{expr:(num->string (vector-ref modified-products-gross-earnings 1) 2)}}.
 
 ## Conclusion
@@ -174,7 +177,7 @@ In this article, we have presented a mathematical model of aggregate product dem
 
 While we have focused on products, the same methods can be used to model demand for services. Additionally, while our examples have assumed that the total number of units sold within a market is fixed, we can easily extend the model to represent variable demand by introducing a "null" product.
 
-In practice, the primary difficulty using this model, as is often the case, lies in parameterization. Unfortunately, it is not possible to "run the equations backwards" and infer the input variables such as product feature scores from output variables such as market share. In general, there are many different product "configurations" that will produce the same market share divisions. As a result, the methods introduced in this article are best used for qualitative and approximate modeling. Input variables such as product scores, and consumer weights, can be approximated using consumer surveys and expert judgement. The resulting parameters can be used to construct qualitative models that can be used to test and prioritize business development plans.
+In practice, the primary difficulty using this model, as is often the case, lies in parameterization. Unfortunately, it is not possible to "run the equations backwards" and infer the input variables such as product feature scores from output variables such as market share. In general, there are many different product "configurations" that will produce the same market share divisions. As a result, the methods introduced in this article are best used for qualitative and approximate modeling. Input variables such as product scores, and consumer weights, can be approximated using consumer surveys and expert judgement.
 
 While our primary contribution has been to introduce a mathematically rigorous model of product demand that is theoretically sensible, we also hope that our mathematical solutions to the equations are valuable. While are confident that these equations have been presented and solved in other contexts, we were unable to find solutions to them in our readings. Hence, we hope that this article will make their derivation and proofs easier to find.
 
@@ -216,16 +219,16 @@ $$
 We will show that the Fourier transform for (4) has the same form as (8). Let $k(\xi)$ represent the Fourier transform for $\varphi (\frac{s - \mu_j}{\sigma_j})$ and replace this term in (3) with its Fourier transform:
 $$
 \begin{align*}
-p_{i,j} &= \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds\\
-&= \int \int_0^{\infty} (\int k(\xi) e^{2 \pi i \xi s}\ d\xi)\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds\\
-&\hspace{2em}(substitute\ the\ Inverse\ Fourier\ transform)\\
-&= \int k(\xi) \int_0^{\infty} \int e^{2 \pi i \xi s}\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ ds\ d\delta\ d\xi\\
-&= \int k(\xi) \int_0^{\infty} e^{2 \pi i \xi (\mu_i - \delta)} e^{-2(\pi \xi \sigma_i)^2}\ d\delta\ d\xi \hspace{3em}\\
-&\hspace{2em}(similar\ to\ the\ derivation\ for\ the\ Fourier\ transform\ of\ the\ Normal\ PDF) \\
-&= \int k(\xi) e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}\int_0^{\infty} e^{-2 \pi i \xi \delta}\ d\delta\ d\xi\\
-&= \int \frac{k(\xi) e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}}{2 \pi i \xi} d\xi\\
-&= \int \frac{e^{-2 \pi i \xi \mu_j}\ e^{-2(\pi \xi \sigma_j)^2} e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}}{2 \pi i \xi} d\xi\hspace{3em}\\
-&\hspace{2em}(expand\ k(\xi))\\
+p_{i,j} &= \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds\\\\
+&= \int \int_0^{\infty} (\int k(\xi) e^{2 \pi i \xi s}\ d\xi)\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds\\\\
+&\hspace{2em}(substitute\ the\ Inverse\ Fourier\ transform)\\\\
+&= \int k(\xi) \int_0^{\infty} \int e^{2 \pi i \xi s}\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ ds\ d\delta\ d\xi\\\\
+&= \int k(\xi) \int_0^{\infty} e^{2 \pi i \xi (\mu_i - \delta)} e^{-2(\pi \xi \sigma_i)^2}\ d\delta\ d\xi \hspace{3em}\\\\
+&\hspace{2em}(similar\ to\ the\ derivation\ for\ the\ Fourier\ transform\ of\ the\ Normal\ PDF) \\\\
+&= \int k(\xi) e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}\int_0^{\infty} e^{-2 \pi i \xi \delta}\ d\delta\ d\xi\\\\
+&= \int \frac{k(\xi) e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}}{2 \pi i \xi} d\xi\\\\
+&= \int \frac{e^{-2 \pi i \xi \mu_j}\ e^{-2(\pi \xi \sigma_j)^2} e^{2 \pi i \xi \mu_i}  e^{-2(\pi \xi \sigma_i)^2}}{2 \pi i \xi} d\xi\hspace{3em}\\\\
+&\hspace{2em}(expand\ k(\xi))\\\\
 &= \int \frac{e^{2 \pi i \xi (\mu_i - \mu_j)}\ e^{-2(\pi \xi \sqrt{\sigma_i^2 + \sigma_j^2})^2}}{2 \pi i \xi} d\xi.
 \end{align*}
 $$
@@ -239,25 +242,25 @@ In this section, we will show how we can calculate the Fourier Transform for the
 We can calculate the Fourier Transform for the PDF by expanding terms and completing the square as follows
 $$
 \begin{align*}
-k(\xi) &:= \int \varphi (\frac{x - \mu}{\sigma}) e^{-2 \pi i \xi x} dx \\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{(x - \mu)^2}{s \sigma^2}} e^{-2 \pi i \xi x} dx\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2 \mu x + \mu^2) - 2 \pi i \xi x} dx\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2 \mu x + \mu^2 + 4 \pi i \xi \sigma^2 x)} dx\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2x (\mu - 2 \pi i \xi \sigma^2) + (\mu - 2 \pi i \xi \sigma^2)^2 - (\mu - 2 \pi i \xi \sigma^2)^2 + \mu^2)} dx \hspace{3em}\\
-&\hspace{2em}(complete\ the\ square)\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2 - (\mu - 2 \pi i \xi \sigma^2)^2 + \mu^2)} dx\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2 + 4 \mu \pi i \xi \sigma^2 + 4(\pi \xi \sigma^2)^2)} dx\\
-&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2}e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2)} dx\\
-&= e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2} \int \varphi(\frac{x - (\mu - 2 \pi i \xi \sigma^2)}{\sigma})\ dx\\
+k(\xi) &:= \int \varphi (\frac{x - \mu}{\sigma}) e^{-2 \pi i \xi x} dx \\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{(x - \mu)^2}{s \sigma^2}} e^{-2 \pi i \xi x} dx\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2 \mu x + \mu^2) - 2 \pi i \xi x} dx\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2 \mu x + \mu^2 + 4 \pi i \xi \sigma^2 x)} dx\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}(x^2 - 2x (\mu - 2 \pi i \xi \sigma^2) + (\mu - 2 \pi i \xi \sigma^2)^2 - (\mu - 2 \pi i \xi \sigma^2)^2 + \mu^2)} dx \hspace{3em}\\\\
+&\hspace{2em}(complete\ the\ square)\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2 - (\mu - 2 \pi i \xi \sigma^2)^2 + \mu^2)} dx\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2 + 4 \mu \pi i \xi \sigma^2 + 4(\pi \xi \sigma^2)^2)} dx\\\\
+&= \frac{1}{\sigma \sqrt{2 \pi}} \int e^{-\frac{1}{2 \sigma^2}((x - (\mu - 2 \pi i \xi \sigma^2))^2}e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2)} dx\\\\
+&= e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2} \int \varphi(\frac{x - (\mu - 2 \pi i \xi \sigma^2)}{\sigma})\ dx\\\\
 &= e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2}.
 \end{align*}
 $$
 We can then use this equation to calculate the Inverse Fourier transform for the Normal PDF.
 $$
 \begin{align*}
-\varphi (\frac{x - \mu}{\sigma}) &= \int k(\xi) e^{2\pi i \xi x}\ d\xi\\
-&= \int e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2} e^{2\pi i \xi x}\ d\xi\\
-&= \int e^{2 \pi i \xi (x - \mu) - 2(\pi \xi \sigma)^2}\ d\xi\\
+\varphi (\frac{x - \mu}{\sigma}) &= \int k(\xi) e^{2\pi i \xi x}\ d\xi\\\\
+&= \int e^{-2 \mu \pi i \xi - 2(\pi \xi \sigma)^2} e^{2\pi i \xi x}\ d\xi\\\\
+&= \int e^{2 \pi i \xi (x - \mu) - 2(\pi \xi \sigma)^2}\ d\xi\\\\
 \end{align*}
 $$
 We can actually simplify this expression further. To do so, note that the integral is quasi symmetric about $\xi = 0$. Rewrite the integral so that it spans from 0 to $\infty$ and move the expression for both $+\xi$ and $- \xi$ into it. Next, expand the complex exponential into sines and cosines. The sine terms will cancel out. The result will be
@@ -288,7 +291,7 @@ $$
 ## Footnotes
 
 [^1]: In general, preferences will not be independent across feature dimensions. For example, the importance that a consumer assigns to the weight of a product might correlate with the weight that they assign to its size. Thus, in practice, we will typically need to perform factor analysis such as Principal Component Analysis (PCA) to identify a set of independent feature dimensions.
-[^2]: Note that the second argument to $\mathcal$ gives the distribution's variance.
+[^2]: Note that the second argument to $\mathcal{N}$ gives the distribution's variance.
 [^3]: Whenever two functions have identical Fourier transforms, we know that they are equal. 
 
 ## References
