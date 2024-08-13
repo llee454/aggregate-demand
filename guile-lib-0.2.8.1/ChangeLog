@@ -1,0 +1,6 @@
+We now use Git as the primary keeper of our revision log information.
+
+For those that build from tarballs, we will generate ChangeLog for
+releases, from the git history.
+
+ChangeLog entries from 2008 and before may be found in ChangeLog.2008.

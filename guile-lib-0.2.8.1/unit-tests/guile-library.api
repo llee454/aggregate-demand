@@ -1,0 +1,275 @@
+(module-api
+  (version 1 0)
+  ((apicheck)
+   (uses-interfaces)
+   (typed-exports
+     (apicheck-generate procedure (arity 1 0 #f))
+     (apicheck-validate procedure (arity 2 0 #f))))
+  ((config load)
+   (uses-interfaces)
+   (typed-exports
+     (&config-error struct-vtable)
+     (<configuration> class)
+     (config-error-arguments procedure (arity 1 0 #f))
+     (load-config!
+       generic
+       (<configuration> <list> <string>))))
+  ((container async-queue)
+   (uses-interfaces)
+   (typed-exports
+     (async-dequeue! procedure (arity 1 0 #f))
+     (async-enqueue! procedure (arity 2 0 #f))
+     (make-async-queue procedure (arity 0 0 #f))))
+  ((container delay-tree)
+   (uses-interfaces)
+   (typed-exports
+     (force-ref procedure (arity 2 0 #f))))
+  ((container nodal-tree)
+   (uses-interfaces)
+   (typed-exports
+     (make-node procedure (arity 0 0 #t))
+     (nodal-tree? procedure (arity 1 0 #f))
+     (node-children procedure (arity 1 0 #f))
+     (node-ref procedure (arity 2 0 #f))
+     (node-set! procedure (arity 3 0 #f))))
+  ((debugging assert)
+   (uses-interfaces)
+   (typed-exports
+     (assert macro)
+     (cerr procedure (arity 0 0 #t))
+     (cout procedure (arity 0 0 #t))))
+  ((debugging time)
+   (uses-interfaces)
+   (typed-exports (time macro)))
+  ((graph topological-sort)
+   (uses-interfaces)
+   (typed-exports
+     (topological-sort procedure (arity 1 0 #f))
+     (topological-sortq procedure (arity 1 0 #f))
+     (topological-sortv procedure (arity 1 0 #f))))
+  ((htmlprag)
+   (uses-interfaces)
+   (typed-exports
+     (%default-parent-constraints <pair>)
+     (%parent-constraints procedure (arity 0 0 #f))
+     (%strict-tokenizer? procedure (arity 0 0 #f))
+     (html->shtml procedure (arity 1 0 #f))
+     (html->sxml procedure (arity 1 0 #f))
+     (html->sxml-0nf procedure (arity 1 0 #f))
+     (html->sxml-1nf procedure (arity 1 0 #f))
+     (html->sxml-2nf procedure (arity 1 0 #f))
+     (make-html-tokenizer procedure (arity 2 0 #f))
+     (parse-html/tokenizer procedure (arity 2 0 #f))
+     (shtml->html procedure (arity 1 0 #f))
+     (shtml-comment-symbol <symbol>)
+     (shtml-decl-symbol <symbol>)
+     (shtml-empty-symbol <symbol>)
+     (shtml-end-symbol <symbol>)
+     (shtml-entity-symbol <symbol>)
+     (shtml-entity-value procedure (arity 1 0 #f))
+     (shtml-named-char-id <string>)
+     (shtml-numeric-char-id <string>)
+     (shtml-pi-symbol <symbol>)
+     (shtml-start-symbol <symbol>)
+     (shtml-text-symbol <symbol>)
+     (shtml-token-kind procedure (arity 1 0 #f))
+     (shtml-top-symbol <symbol>)
+     (sxml->html procedure (arity 1 0 #f))
+     (test-htmlprag procedure (arity 0 0 #f))
+     (tokenize-html procedure (arity 2 0 #f))
+     (write-shtml-as-html procedure (arity 2 0 #f))
+     (write-sxml-html procedure (arity 2 0 #f))))
+  ((io string)
+   (uses-interfaces)
+   (typed-exports
+     (find-string-from-port? procedure (arity 2 0 #t))))
+  ((logging logger)
+   (uses-interfaces)
+   (typed-exports
+     (<log-handler> class)
+     (<logger> class)
+     (accept-log
+       generic
+       (<log-handler> <top> <top> <top> <top> <top>))
+     (add-handler! generic (<logger> <log-handler>))
+     (close-log!
+       generic
+       ()
+       (<log-handler>)
+       (<logger>)
+       (<port-log>)
+       (<rotating-log>))
+     (disable-log-level! procedure (arity 2 0 #f))
+     (emit-log
+       generic
+       (<port-log> <top>)
+       (<rotating-log> <top>))
+     (enable-log-level! procedure (arity 2 0 #f))
+     (flush-log
+       generic
+       ()
+       (<log-handler>)
+       (<logger>)
+       (<port-log>)
+       (<rotating-log>))
+     (log-msg
+       generic
+       (<logger> <symbol> . <top>)
+       (<logger> <top> <symbol> . <top>)
+       (<symbol> . <top>)
+       (<top> <symbol> . <top>))
+     (lookup-logger procedure (arity 1 0 #f))
+     (open-log!
+       generic
+       ()
+       (<log-handler>)
+       (<logger>)
+       (<rotating-log>))
+     (register-logger! procedure (arity 2 0 #f))
+     (set-default-logger! procedure (arity 1 0 #f))))
+  ((logging port-log)
+   (uses-interfaces)
+   (typed-exports (<port-log> class)))
+  ((logging rotating-log)
+   (uses-interfaces)
+   (typed-exports (<rotating-log> class)))
+  ((match-bind)
+   (uses-interfaces)
+   (typed-exports
+     (match-bind macro)
+     (s/// procedure (arity 2 0 #f))
+     (s///g procedure (arity 2 0 #f))))
+  ((math minima)
+   (uses-interfaces)
+   (typed-exports
+     (golden-section-search procedure (arity 4 0 #f))))
+  ((math primes)
+   (uses-interfaces)
+   (typed-exports
+     (factor procedure (arity 1 0 #f))
+     (prime:trials <integer>)
+     (prime< procedure (arity 1 0 #f))
+     (prime> procedure (arity 1 0 #f))
+     (prime? procedure (arity 1 0 #f))
+     (primes< procedure (arity 2 0 #f))
+     (primes> procedure (arity 2 0 #f))))
+  ((os process)
+   (uses-interfaces)
+   (typed-exports
+     (os:process:new-comm-pipes
+       procedure
+       (arity 2 0 #f))
+     (os:process:pipe-fork-child macro)
+     (os:process:pipe-make-commands
+       procedure
+       (arity 3 0 #f))
+     (os:process:pipe-make-redir-commands
+       procedure
+       (arity 2 0 #f))
+     (os:process:setup-redirected-port
+       procedure
+       (arity 2 0 #f))
+     (run procedure (arity 1 0 #t))
+     (run+ macro)
+     (run-concurrently procedure (arity 0 0 #t))
+     (run-concurrently+ macro)
+     (run-with-pipe procedure (arity 2 0 #t))
+     (tail-call-pipeline macro)
+     (tail-call-pipeline+ macro)
+     (tail-call-program procedure (arity 1 0 #t))))
+  ((scheme documentation)
+   (uses-interfaces)
+   (typed-exports
+     (define-class-with-docs macro)
+     (define-generic-with-docs macro)
+     (define-macro-with-docs macro)
+     (define-with-docs macro)))
+  ((scheme kwargs)
+   (uses-interfaces)
+   (typed-exports
+     (define/kwargs macro)
+     (lambda/kwargs macro)))
+  ((search basic)
+   (uses-interfaces)
+   (typed-exports
+     (binary-search-sorted-vector
+       procedure
+       (arity 2 2 #f))
+     (breadth-first-search procedure (arity 3 0 #f))
+     (depth-first-search procedure (arity 3 0 #f))))
+  ((string completion)
+   (uses-interfaces)
+   (typed-exports
+     (<string-completer> class)
+     (add-strings! generic (<string-completer> <top>))
+     (all-completions procedure (arity 2 0 #f))
+     (case-sensitive-completion?
+       generic
+       (<string-completer>))
+     (complete generic (<string-completer> <top>))))
+  ((string soundex)
+   (uses-interfaces)
+   (typed-exports
+     (soundex procedure (arity 1 0 #f))))
+  ((string transform)
+   (uses-interfaces)
+   (typed-exports
+     (center-string procedure (arity 1 3 #f))
+     (collapse-repeated-chars
+       procedure
+       (arity 1 2 #f))
+     (escape-special-chars procedure (arity 3 0 #f))
+     (expand-tabs procedure (arity 1 1 #f))
+     (left-justify-string procedure (arity 1 2 #f))
+     (right-justify-string procedure (arity 1 2 #f))
+     (transform-string procedure (arity 3 2 #f))))
+  ((string wrap)
+   (uses-interfaces)
+   (typed-exports
+     (<text-wrapper> class)
+     (fill-string
+       generic
+       (<text-wrapper> <top>)
+       (<top> . <top>))
+     (string->wrapped-lines
+       generic
+       (<text-wrapper> <top>)
+       (<top> . <top>))))
+  ((term ansi-color)
+   (uses-interfaces)
+   (typed-exports
+     (color procedure (arity 0 0 #t))
+     (colorize-string procedure (arity 1 0 #t))))
+  ((unit-test)
+   (uses-interfaces)
+   (typed-exports
+     (<test-case> class)
+     (<test-result> class)
+     (<test-suite> class)
+     (add generic
+          (<test-suite> <test-case>)
+          (<test-suite> <test-suite>))
+     (assert macro)
+     (assert-equal procedure (arity 2 0 #f))
+     (assert-exception macro)
+     (assert-false procedure (arity 1 0 #f))
+     (assert-numeric-= procedure (arity 3 0 #f))
+     (assert-true procedure (arity 1 0 #f))
+     (exit-with-summary procedure (arity 1 0 #f))
+     (failure-messages generic (<test-result>))
+     (name generic (<test-case>) (<test-suite>))
+     (run generic
+          (<test-case> <test-result>)
+          (<test-suite> <test-result>))
+     (run-all-defined-test-cases
+       procedure
+       (arity 0 0 #f))
+     (set-up-test generic (<test-case>))
+     (summary generic (<test-result>))
+     (tear-down-test generic (<test-case>))
+     (test-failed generic (<test-result> <string>))
+     (test-started generic (<test-result> <string>))
+     (tests generic (<test-suite>))
+     (tests-failed generic (<test-result>))
+     (tests-log generic (<test-result>))
+     (tests-run generic (<test-result>)))))

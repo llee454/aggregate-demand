@@ -1,0 +1,420 @@
+# ;; -*- mode: org; coding: utf-8 -*-
+
+#+TITLE: Guile-Lib NEWS
+
+#+BEGIN_COMMENT
+
+Copyright (C) 2007,2010,2011 Andy Wingo <wingo at pobox dot com>
+Copyright (C) 2018, 2021, 2024 David Pirotte <david at altosw dot be>
+
+This document is part of Guile-Lib.
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved.  This file is offered as-is, without any
+warranty.
+
+#+END_COMMENT
+
+
+                Guile-Lib - History of user-visible changes
+                ===========================================
+
+                   Please send Guile-Lib bug reports to
+                           guile-devel@gnu.org
+
+* Latest News
+
+** April 2024
+
+Guile-Lib version 0.2.8.1 released.
+
+***  Noteworthy changes in 0.2.8.1
+
+Here is a summary of the noteworthy changes in this release. See
+Guile-Lib's [[http://git.savannah.nongnu.org/cgit/guile-lib.git][git summary]] and [[http://git.savannah.nongnu.org/cgit/guile-lib.git/log/][git log]] for a complet description.
+
+**** Fixing an empty guile-library.info in 0.2.8
+
+
+* Older News
+
+** March 2024
+
+Guile-Lib version 0.2.8 released.
+
+***  Noteworthy changes in 0.2.8
+
+Here is a summary of the noteworthy changes in this release. See
+Guile-Lib's [[http://git.savannah.nongnu.org/cgit/guile-lib.git][git summary]] and [[http://git.savannah.nongnu.org/cgit/guile-lib.git/log/][git log]] for a complet description.
+
+**** The (logging logger)
+
+***** New #:source-properties keyword argument
+
+The log-helper and default-log-formatter procedures now accept and
+process a #:source-properties keyword argument.
+
+***** New <log-handler> flush-on-emit? slot
+
+Support added for a <log-handler> flush-on-emit? slot, default value #t,
+queried by the accept-log method to trigger a flush-log method call upon
+emit, accordingly.
+
+** March 2021
+
+Guile-Lib version 0.2.7 released.  This is a maintenance release, mostly
+dedicated to fixing things so that Guile-Lib allows Guile 3.0, enables
+cross-compilation, and enhances the htmlprag module.  See below for a
+complete description of these changes.
+
+*** Changes since 0.2.6.1
+
+Here is a summary of the changes since version 0.2.6.1. See Guile-Lib's
+[[http://git.savannah.nongnu.org/cgit/guile-lib.git][git summary]] and [[http://git.savannah.nongnu.org/cgit/guile-lib.git/log/][git log]] for a complet description.
+
+**** The htmlprag module has been enhanced
+
+New %default-parent-constraints variable. New %parent-constraints and
+%strict-tokenizer? parameters. The following procedures now accept a new
+#:strict optional keyword argument: parse-html/tokenizer,
+htmlprag-internal:parse-html, tml->sxml-0nf, html->sxml-1nf and
+html->sxml-2nf.
+
+The documentation has been updated accordingly, but the commit log entry
+for these changes - commit 84c42076954dc8c72a03aae470eeade1094523fe -
+also offers a few additional comments worth reading.
+
+**** Enabling cross-compilation
+
+Configure cross-compilation argument now properly detected and passed to
+guild.
+
+*** Noteworthy bug fixes
+
+- Fix the md5.scm misscompilation on Guile 3 (at -O2).
+- Doc Makefile, adapting to GNU Make 4.3.
+
+** July 2018
+
+Guile-Lib version 0.2.6.1 is released.
+
+*** Changes since 0.2.6
+
+Here is a summary of the changes since version 0.2.6. See Guile-Lib's
+[[http://git.savannah.nongnu.org/cgit/guile-lib.git][git summary]] and [[http://git.savannah.nongnu.org/cgit/guile-lib.git/log/][git log]] for a complet description.
+
+**** Configure msgs improved
+
+The configure step NOTICE and WARN msgs (the latter being displayed when
+--with-guile-site="no") have been slightly improved.
+
+**** Guile-Lib's pkg-config file
+
+Receives one more variable: guile_site=[yes|no].
+
+*** Bugs fixed
+
+The script pre-inst-env.in has been fixed so it properly sets
+GUILE_LOAD_PATH and GUILE_LOAD_COMPILED_PATH (thanks to Ludovic Courtès
+who reported this bug).
+
+** June 2018
+
+Guile-Lib version 0.2.6 is released.  This is a maintenance release,
+fixing the default installation locations, and adding a new configure
+option - see below for a complete description of these changes.
+
+*** Changes since 0.2.5.1
+
+Here is a summary of the changes since version 0.1.2. See Guile-Lib's
+[[http://git.savannah.nongnu.org/cgit/guile-lib.git][git summary]] and [[http://git.savannah.nongnu.org/cgit/guile-lib.git/log/][git log]] for a complete description.
+
+**** Installation location changes
+
+The default and --prefix installation locations for source modules and
+compiled files has been changed, and, in the absence of the new
+configure option described below, are now:
+
+  $(datadir)/guile-lib
+  $(libdir)/guile-lib/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache
+
+In the above, $(datadir) is substituted to the default /usr/local/share
+or /your/prefix/share and $(libdir) is substituted to /usr/local/lib or
+/your/prefix/lib, when/if --prefix was passed.
+
+$(GUILE_EFFECTIVE_VERSION) is substituted to the stable version number
+with which Guile-Lib is being compile, for example, 2.2
+
+This change makes Guile-Lib compatible with the GNU Coding Standards,
+but it also implies that, unless you use the new configure option
+describe below, you will have to augment both Guile's variables
+%load-path and %load-compiled-pat (see 'Environment Variables'
+in Guile's Reference Manual) before to use Guile-Lib's modules.
+
+**** New configure option
+
+The configure option --with-guile-site has been added, used to
+explicitly ask Guile-Lib's source modules and compiled files to be
+installed using Guile's global site and site-ccache directories
+respectively.
+
+It will only be honored if (and only if) it is passed as:
+
+  --with-guile-site=yes
+
+  [ in this case, there is obviously no need to augment Guile's
+  [ variables %load-path and %load-compiled-path
+
+The configure step now lists the following variables: prefix,
+exec_prefix, datarootdir, sitedir and siteccachedir.  It will also warn
+the user if the last two variables differ from Guile's site and
+site-ccache values.
+
+** Guile-Lib 0.2.5.1 -- 2017-06-02
+
+This is a maintenance release, the next maintenance release for the
+Guile-Lib 0.2 series.
+
+*** Changes since version 0.2.5
+
+Note that is actually not a user visible change, but the change is
+important enough to trigger a release.
+
+The new guile.m4 autoconf macros have been patched to solve a problem
+with respect to Guile's major version checks, now allowing prereleases
+of Guile with a new major version.
+
+** Guile-Lib 0.2.5 -- 2017-01-17
+
+This is a maintenance release, the next maintenance release for the
+Guile-Lib 0.2 series.
+
+*** (unit-test) 2 new APIs
+
+  Prodedure: assert-false expr
+  Special Form: assert expr
+
+  assert-false will throw a 'test-failed-exception unless the evaluation
+  of expr returns #f.
+
+  assert will throw a 'test-failed-exception if expr raises an
+  exception.
+
+** Guile-Lib 0.2.4 -- 2016-11-14
+
+This is a maintenance release, the next maintenance release for the
+Guile-Lib 0.2 series.
+
+*** Bug fixes
+	
+  (unit-test)
+
+	assert-numeric-= 'test-failed-exception report message was
+	inadequate and has been fixed.
+	
+  Do not check what is not installed
+
+	starting with Guile-2.0, some Guile-Lib modules became Guile
+	core modules, and not installed.  However, we all forgot to
+	adapt the test-suite so it does not check for these not instlled
+	modules anymore, fixed.
+
+  Install source files first
+
+    	Make sure source files are installed first, so that the mtime of
+        installed compiled files is greater than that of installed
+        source files, in order to avoid a rather annoying local
+        (per-user) recompilation of Guile-Lib modules.
+
+** Guile-Lib 0.2.3 -- 2016-09-19
+
+This is a maintenance release, source code is unchanged compare to the
+previous release.  This release introduces a Guile-Lib-1.0.pc, so libs
+and apps that needs Guile-Lib may now use pkgconfig to check if it's
+available, what version.
+
+Note that starting with this release, the installation location for
+modules and compiled files has changed: make sure you uninstall any
+previous version of Guile-Lib.
+
+*** Dependencies bumped:
+
+	Autogen  >= 2.69
+	Automake >= 1.14
+	Guile    >= 2.0.12
+
+*** Modules installation location changed:
+
+	from $(prefix)/share/guile/site
+	to $(GUILE_GLOBAL_SITE)
+
+  You will need write privileges to this directory to install
+  Guile-Lib. You may check its location using the folowing command:
+
+	guile -c "(display (%global-site-dir)) (newline)"
+
+*** Compiled files installation location changed:
+
+	from $(prefix)/share/guile/site
+	to $(GUILE_SITE_CCACHE)
+
+  You will need write privileges to this directory to install
+  Guile-Lib. You may check its location using the folowing command:
+
+	guile -c "(display (%site-ccache-dir)) (newline)"
+
+** Guile-Lib 0.2.2 -- 2013-01-31
+
+*** Install (texinfo nodal-tree) for Guile 2.0.
+
+*** MD5 bugfixes.
+
+*** Better errors in Apicheck.
+
+** Guile-Lib 0.2.1 -- 2011-04-03
+
+*** Updates for Guile 1.8.
+
+Some of the compatibility hacks from 0.2.0 broke Guile-Lib on Guile
+1.8.  Thanks to Andreas Rottmann for the various fixes.
+
+** Guile-Lib 0.2.0 -- 2011-03-26
+
+*** Updates for Guile 2.0.
+
+When compiled against Guile 2.0, Guile-Lib no longer installs modules
+that have been included in the Guile distribution.  This is an
+incompatible change: if you build Guile-Lib against Guile 2.0 and then
+use it against 1.8, you will be missing `(sxml simple)' and the other
+modules that were incorporated in Guile 2.0.
+
+That said, Guile 2.0 is appoximately 7.1 times as awesome as Guile 1.8,
+so you should stop worrying and learn to love it.
+
+** Guile-Lib 0.1.9 -- 2010-08-29
+
+*** Updates for Guile 2.0.
+
+Guile 2.0 has incorporated many modules from Guile-Lib, but all the same
+we have to make sure that one Guile-Lib installation works fine with 1.8
+and 2.0.
+
+*** The default SSAX parser no longer drops whitespace.
+
+We used to drop extraneous whitespace when using the default XML parser,
+but strictly speaking, this loses information. Guile-Lib now preserves
+whitespace in the resulting SXML.
+
+*** SSAX supports UTF-8 output on Guile 1.8.
+
+Guile 1.8 naively treats characters as bytes, not understanding
+unicode. Still sometimes it's useful to emit UTF-8 sequences in Guile
+1.8, which is what this SSAX does. Note that Guile 2.0 includes its own
+SSAX, and handles unicode natively.
+
+*** Expose ssax:predefined-parsed-entities
+
+Allows the user to define &foo; XML entities.
+
+*** License changed to GPL and LGPL, version 3 or later.
+
+See the specific modules for their licenses.
+
+*** Removed modules: (math rationalize), (scheme session), SRFIs 34,35,40
+
+Guile 1.8 and above support rationalize natively. The improvements in
+(scheme session) are in Guile now, as are SRFIs 34 and 35. SRFI 40 is
+withdrawn, in favor of SRFI 41.
+
+*** Removed module (container queue)
+
+Use (ice-9 q) instead.
+
+*** Call tree analysis in statprof
+
+Statprof can save away the various call trees that it samples for later
+analysis. See the statprof documentation, for more information.
+
+** Guile-Lib 0.1.6 -- 2007-09-24
+
+*** New module: (apicheck).
+
+Apicheck implements one function to describe a set of modules' API as an
+s-expression, and another to verify the s-expression against the current
+API.
+
+*** New module: (sxml fold).
+
+(sxml fold) defines a number of fold-based XML transformation operators.
+
+*** Improved support for parsing Texinfo.
+
+(texinfo) now parses the arguments of the @deffnx family of commands.
+Added support for parsing the inline commands @b, @i, @r, @sansserif,
+@slanted, @t, and @tie.
+
+*** Better automatic documentation via (texinfo reflection).
+
+Generic functions are now documented along with all of their methods.
+Documentation for methods is now taken from their procedure
+implementation.
+
+Documentation produced with `module-stexi-documentation' may now be
+filtered or elided via a user-supplied procedure. This allows procedures
+defined in C to have their documentation supplied from a source that is
+not a docstring or an object property, for example from docs snarfed
+from the C source, or from docs written in a separate texinfo file.
+
+Procedures documented by `module-stexi-documentation' are now ordered in
+the order in which they appear in the module's export list, if it is
+possible to obtain this information.
+
+*** Limited support for transforming Docbook to Texinfo.
+
+(texinfo docbook) defines procedures for parsing docbook into SXML,
+flattening that SXML into a form more like STEXI, and a stylesheet for
+transforming a limited subset of that SXML into STEXI. The stylesheet
+may be extended by user code in order to support more docbook elements.
+
+*** Guile-Lib now has API regression tests.
+
+Using Apicheck, we now know the exact interface exported by Guile-Lib,
+so that there will be no unintentional breakages in the future.
+
+*** Bugfixes
+
+See the ChangeLog for details on fixes to (sxml ssax input-parse) and
+(string wrap).
+
+** Guile-Lib 0.1.5 -- 2007-08-09
+
+*** New module (container async-queue).
+
+(container async-queue) implements a simple thread-safe message queue.
+
+*** Fixes for Guile 1.8
+
+READ-LINE is now in (ice-9 rdelim) instead of the core; Guile-Lib has
+been updated accordingly.
+
+** Guile-Lib 0.1.4 -- 2007-07-20
+
+*** First release with NEWS.
+
+*** New module (match-bind).
+
+(match-bind) implements a syntax to bind lexical variables to regular
+expression match results. (match-bind) also exports two procedures, s///
+and s///g, that perform search-and-replace with a perl-like syntax.
+
+*** New module (scheme kwargs).
+
+Two new macros are exported, lambda/kwargs and define/kwargs, which
+implement keyword and optional function arguments in a manner that is
+more intuitive than Guile's standard lambda*.
+
+*** Other bugfixes and improvements.
+
+See the ChangeLog for details on changes to (texinfo serialize),
+(texinfo html), (texinfo), and (sxml simple).

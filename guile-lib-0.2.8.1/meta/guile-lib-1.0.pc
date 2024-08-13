@@ -1,0 +1,19 @@
+# Package Information for pkg-config
+
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+datarootdir=${prefix}/share
+datadir=${datarootdir}
+
+guile_site=yes
+
+sitedir=/usr/share/guile/site
+siteccachedir=/usr/lib/x86_64-linux-gnu/guile/3.0/site-ccache
+
+Name: Guile-Lib
+
+Description: Guile-lib, also known as Guile-Library, is a down-scaled,
+limited-scope CPAN for Guile
+
+Version: 0.2.8.1

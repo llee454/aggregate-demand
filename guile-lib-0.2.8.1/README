@@ -1,0 +1,65 @@
+# ;; -*- mode: org; coding: utf-8 -*-
+
+#+TITLE: Guile-Lib README
+
+#+BEGIN_COMMENT
+
+Copyright (C) 2021, 2024 David Pirotte <david at altosw dot be>
+
+This document is part of Guile-Lib.
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved.  This file is offered as-is, without any
+warranty.
+
+#+END_COMMENT
+
+
+                          Guile-Lib - README
+              ===========================================
+
+                   Please send Guile-Lib bug reports to
+                           guile-devel@gnu.org
+
+
+* Guile-Lib
+
+[[https://www.nongnu.org/guile-lib/][Guile-Lib]]
+A repository of useful code written in Guile Scheme
+
+** Description
+
+Guile-Lib is intended as an accumulation place for pure-scheme Guile
+modules, allowing for people to cooperate integrating their generic
+Guile modules into a coherent library. Think "a down-scaled,
+limited-scope CPAN for Guile".
+
+Guile-Lib modules are well-documented and well-supported. Particularly
+good modules might migrate from Guile-Lib into Guile itself, at some
+point.
+
+** Latest News
+
+April 2024
+
+Guile-Lib version 0.2.8.1 is released.
+
+Visit the [[file:NEWS][NEWS]] file for the list of visible changes since the last
+release, as well as older news.
+
+** Savannah
+
+Guile-Lib also has a Savannah [[http://savannah.nongnu.org/projects/guile-lib/][project page]].
+
+** License
+
+The Guile-Lib package as a whole may be redistributed under the GNU
+General Public License as published by the Free Software Foundation,
+either version 3, or (at your option) any later version.
+
+Each module contained in Guile-Lib has its own copying conditions,
+specified in the comments at the beginning of the module's source file.
+
+Visit the [[file:COPYING][COPYING]] file, which further describe Guile-Lib's copying
+conditions.
