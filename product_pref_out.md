@@ -154,6 +154,7 @@ A_i &:= \Big[\sum_{j=0}^{n-1} (\Phi(\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sig
 A_0 &= \frac{1}{ 1.0000 + 0.2743 + 1.2874 } = 0.3904\\
 A_1 &= \frac{1}{ 3.6459 + 1.0000 + 3.6538 } = 0.1205\\
 A_2 &= \frac{1}{ 0.7768 + 0.2737 + 1.0000 } = 0.4877\\
+
 \end{align*}
 $$
 However, we can do more than calculate relative market share for each product. We can go further and calculate the impact that changes to product features will have on market share. For example, we can use this model to calculate the price that maximizes the gross earnings for the company that produces the second product $A_1$.

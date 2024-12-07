@@ -53,7 +53,7 @@ $$
 np = \frac{n_i}{p_{i,j}} = \frac{n_j}{p_{j,i}}
 \end{align*}
 $$
-Rearranging gives the relative frequency $k_{i,j}$ with which consumers choose $A_i$ over $A_j$.
+Rearranging gives the relative frequency $k_{i,j}$ with which consumers choose $A_i$ over $A_j$.[^4]
 $$
 \begin{align*}
 k_{i,j} = \frac{p_{i,j}}{p_{j,i}} = \frac{n_i}{n_j}
@@ -95,7 +95,7 @@ Thus, we can calculate the proportion of consumers who will choose each product 
 
 ## Example Use
 
-Imagine that we want to model the aggregate demand for three computer processors. Each processor is characterized by myriad features however, we determine that four factors, price, power, area, and performance, explain most consumer preference. We conduct a series of surveys and determine that the weights assigned to these factors are independent and normally distributed.
+Imagine that we want to model the aggregate demand for three computer processors. Each processor is characterized by myriad features however, we determine that four factors, price, power consumption, area, and performance, explain most consumer preference. We conduct a series of surveys and determine that the weights assigned to these factors are independent and normally distributed.
 
 | $j$  | Factor      | Mean $\mu$ | Standard Deviation $\sigma$ |
 | ---- | ----------- | ---------- | --------------------------- |
@@ -103,7 +103,6 @@ Imagine that we want to model the aggregate demand for three computer processors
   (vector-mapi (lambda (i x) (cons i (factor->list x))) factors)
 }}| {{data:local[0]}} | {{data:local[1]}} | {{data:local[2][0]}} | {{data:local[2][1]}} |
 {{/each-expr}}
-
 We then measure three computer processors along each of these four dimensions and produce the following measurements.
 
 | Product | Price $x_{0,i}$ | Power $x_{1,i}$ | Performance $x_{2,i}$ | Area $x_{3,i}$ |
@@ -114,7 +113,6 @@ We then measure three computer processors along each of these four dimensions an
     init-products)
 }}| {{data:local[0]}} | {{data:local[1][0]}} | {{data:local[1][1]}} | {{data:local[1][2]}} | {{data:local[1][3]}} |
 {{/each-expr}}
-
 Based on these factor values, we can use (1) to calculate the score distribution for each product.
 
 | Product | Mean Score $\mu$ | Score Standard Deviation $\sigma$ |
@@ -125,11 +123,12 @@ Based on these factor values, we can use (1) to calculate the score distribution
     init-products-scores)
 }}| {{data:local[0]}} | {{data:local[1][0]}} | {{expr:(num->string (get-data "local[1][1]") 4)}} |
 {{/each-expr}}
-
- Once we have derived the distributions for the product quality scores, we can calculate the probability $p_{i,j}$ that a randomly selected consumer will choose one product over another for each pair of products $A_i$ and $A_j$ using (3). We can record these probabilities in a matrix like the following
+Once we have derived the distributions for the product quality scores, we can calculate the probability $p_{i,j}$ that a randomly selected consumer will choose one product over another for each pair of products $A_i$ and $A_j$ using (3). We can record these probabilities in a matrix like the following
 $$
 \begin{align*}
-P := \begin{bmatrix}
+P_{i,j} &:= \Phi (\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})\\\\
+\\\\
+P &= \begin{bmatrix}
 {{#each-expr:
   init-products-probs
 }}{{expr:(num->string (get-data "local[0]") 4)}}{{#each-expr:(cdr (get-data "local"))}} & {{expr:(num->string (get-data "local") 4)}}{{/each-expr}}\\\\
@@ -140,7 +139,9 @@ $$
 Dividing along the diagonals, we can calculate the likelihood ratios $k_{i,j}$ for each pair of products
 $$
 \begin{align*}
-K := \begin{bmatrix}
+K_{i,j} := (\Phi (\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})^{-1} - 1)^{-1}\\\\
+\\\\
+K = \begin{bmatrix}
 {{#each-expr:
   init-products-ratios
 }}{{expr:(num->string (get-data "local[0]") 4)}}{{#each-expr:(cdr (get-data "local"))}} & {{expr:(num->string (get-data "local") 4)}}{{/each-expr}}\\\\
@@ -151,6 +152,8 @@ $$
 Adding elements within each column, we can calculate the probability that a randomly selected consumer will choose each product
 $$
 \begin{align*}
+A_i &:= \Big[\sum_{j=0}^{n-1} (\Phi(\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})^{-1} - 1)^{-1}\Big]^{-1}\\\\
+\\\\
 {{#each-expr:
   (vector-mapi
     (lambda (i x)
@@ -178,8 +181,7 @@ Then each product has the following gross earnings
 | $A_1$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 1) 2)}} |
 | $A_2$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 2) 2)}} |
 
-However, our model indicates that the company that manufactures $A_1$ will actually maximize their gross earnings if they can reduce their price from \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref init-products 1)) 0)) 2)}} to \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref modified-products 1)) 0)) 2)}}.
-Doing so will increase their market share to {{expr:(num->string (* 100 (vector-ref modified-products-market-shares 1)) 2)}}% and increase their gross earnings to ${{expr:(num->string (vector-ref modified-products-gross-earnings 1) 2)}}.
+However, our model indicates that the company that manufactures $A_1$ will actually maximize their gross earnings if they can reduce their price from \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref init-products 1)) 0)) 2)}} to \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref modified-products 1)) 0)) 2)}}. Doing so will increase their market share to {{expr:(num->string (* 100 (vector-ref modified-products-market-shares 1)) 2)}}% and increase their gross earnings to ${{expr:(num->string (vector-ref modified-products-gross-earnings 1) 2)}}.
 
 ## Related Work
 
