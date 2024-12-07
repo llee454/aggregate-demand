@@ -4,6 +4,8 @@
 
 <center>August 9, 2024</center>
 
+<center><small>Revised: December 7, 2024</small></center>
+
 > Abstract: This article presents a model of aggregate demand for products and services based on consumer preferences for product features. Organizations offering services and products can use this model to prioritize feature development and service improvement initiatives by estimating the potential impact of product changes on aggregate demand.
 
 ## Introduction
@@ -12,7 +14,7 @@ In this article, we present a mathematical model of aggregate demand for product
 
 ## The Model
 
-We start by assuming that there is a set of products $A_i$ and potential consumers in a marketplace. We characterize the products using a set of common feature dimensions, such as weight, cost, and performance. Thus, every product is associated with a vector listing its feature values $[x_{j,i}]$. Every potential consumer assigns a different weight to each feature dimension. These weights are represented by the consumer's preference vector $[k_{l,j}]$. Consumers assign a quality score to each product $s_{l,i} = \sum_{j=0}^n k_{l,j} x_{j,i}$ that is a linear combination of the product's feature values and the consumer's feature weights.
+We start by assuming that there is a set of products $A_i$ and potential consumers in a marketplace. We characterize the products using a set of common feature dimensions, such as weight, cost, and performance. Thus, every product $i$ is associated with a vector listing its feature $j$ values $[x_{j,i}]$. Every potential consumer $l$ assigns a different weight to each feature dimension $i$. These weights are represented by the consumer's preference vector $[k_{l,j}]$. Consumers assign a quality score to each product $s_{l,i} = \sum_{j=0}^n k_{l,j} x_{j,i}$ that is a linear combination of the product's feature values and the consumer's feature weights.
 
 We assume that, for every feature dimension $j$, consumer preference weights $k_{l,j}$ are normally distributed and that preferences across dimensions are independent.[^1] Because the quality scores are linear combinations of independent normally distributed variables, the quality scores for each product will also be normally distributed. 
 
@@ -30,7 +32,7 @@ $$
 p_{i,j} = \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds.
 \end{align}
 $$
-(1) is equivalent to
+(2) is equivalent to
 $$
 \begin{align}
 p_{i,j} = \Phi (\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}}).
@@ -57,6 +59,12 @@ $$
 k_{i,j} = \frac{p_{i,j}}{p_{j,i}} = \frac{n_i}{n_j}
 \end{align*}
 $$
+We can expand this equation to rewrite $k_{i,j}$ as follows:
+$$
+\begin{align*}
+k_{i,j} = \frac{\Phi(\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})}{\Phi(\frac{\mu_j - \mu_i}{\sqrt{\sigma_i^2 + \sigma_j^2}})} = (\Phi(\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})^{-1} - 1)^{-1}.
+\end{align*}
+$$
 Let $p_i$ represent the absolute probability that a consumer will choose product $A_i$. Then, assuming that every consumer chooses a product, we can form the equation:
 $$
 \begin{align*}
@@ -77,6 +85,12 @@ $$
 p_0 = \frac{1}{1 + k_{1,0} + \cdots + k_{n,0}}.
 \end{align*}
 $$
+Generalizing we derive the following equation, which returns the absolute probability $p_i$ that a consumer will choose product $A_i$ when the mean utility value assigned to $A_i$ equals $\mu_i$ and these values have standard deviation $\sigma_i$:
+$$
+\begin{align}
+p_i = \Big[\sum_{j=0}^{n-1} (\Phi(\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}})^{-1} - 1)^{-1}\Big]^{-1}.
+\end{align}
+$$
 Thus, we can calculate the proportion of consumers who will choose each product offered within a marketplace based on their preferences for product features. Using these equations, we can calculate the effect that feature changes will have on aggregate demand for various products.
 
 ## Example Use
@@ -89,7 +103,6 @@ Imagine that we want to model the aggregate demand for three computer processors
   (vector-mapi (lambda (i x) (cons i (factor->list x))) factors)
 }}| {{data:local[0]}} | {{data:local[1]}} | {{data:local[2][0]}} | {{data:local[2][1]}} |
 {{/each-expr}}
->  **Table 1: Example Factor Weights for Computer Processors.** This table presents example factor weights to illustrate how product features influence consumer product preferences.
 
 We then measure three computer processors along each of these four dimensions and produce the following measurements.
 
@@ -101,7 +114,6 @@ We then measure three computer processors along each of these four dimensions an
     init-products)
 }}| {{data:local[0]}} | {{data:local[1][0]}} | {{data:local[1][1]}} | {{data:local[1][2]}} | {{data:local[1][3]}} |
 {{/each-expr}}
-> **Table 2: Example Product Factor Values.** This table presents example factor measurements for three hypothetical computer processors to illustrate how the aggregate demand model can be used.
 
 Based on these factor values, we can use (1) to calculate the score distribution for each product.
 
@@ -113,7 +125,6 @@ Based on these factor values, we can use (1) to calculate the score distribution
     init-products-scores)
 }}| {{data:local[0]}} | {{data:local[1][0]}} | {{expr:(num->string (get-data "local[1][1]") 4)}} |
 {{/each-expr}}
-> **Table 3: Example Product Quality Scores.** This table presents probability distribution parameters for example product quality scores (utilities).
 
  Once we have derived the distributions for the product quality scores, we can calculate the probability $p_{i,j}$ that a randomly selected consumer will choose one product over another for each pair of products $A_i$ and $A_j$ using (3). We can record these probabilities in a matrix like the following
 $$
@@ -123,8 +134,8 @@ P := \begin{bmatrix}
   init-products-probs
 }}{{expr:(num->string (get-data "local[0]") 4)}}{{#each-expr:(cdr (get-data "local"))}} & {{expr:(num->string (get-data "local") 4)}}{{/each-expr}}\\\\
 {{/each-expr}}
-\end{bmatrix}
-\end{align*}.
+\end{bmatrix}.
+\end{align*}
 $$
 Dividing along the diagonals, we can calculate the likelihood ratios $k_{i,j}$ for each pair of products
 $$
@@ -134,8 +145,8 @@ K := \begin{bmatrix}
   init-products-ratios
 }}{{expr:(num->string (get-data "local[0]") 4)}}{{#each-expr:(cdr (get-data "local"))}} & {{expr:(num->string (get-data "local") 4)}}{{/each-expr}}\\\\
 {{/each-expr}}
-\end{bmatrix}
-\end{align*}.
+\end{bmatrix}.
+\end{align*}
 $$
 Adding elements within each column, we can calculate the probability that a randomly selected consumer will choose each product
 $$
@@ -166,10 +177,21 @@ Then each product has the following gross earnings
 | $A_0$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 0) 2)}} |
 | $A_1$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 1) 2)}} |
 | $A_2$ | ${{expr:(num->string (vector-ref init-products-gross-earnings 2) 2)}} |
-> **Table 4: Example Product Gross Earnings.** This table presents example gross earnings for a set of hypothetical products.
 
 However, our model indicates that the company that manufactures $A_1$ will actually maximize their gross earnings if they can reduce their price from \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref init-products 1)) 0)) 2)}} to \${{expr:(num->string (get-price-amount (vector-ref (product-data (vector-ref modified-products 1)) 0)) 2)}}.
 Doing so will increase their market share to {{expr:(num->string (* 100 (vector-ref modified-products-market-shares 1)) 2)}}% and increase their gross earnings to ${{expr:(num->string (vector-ref modified-products-gross-earnings 1) 2)}}.
+
+## Related Work
+
+We have derived a choice model based on the following assumptions:
+
+1. consumers use linear models to assess the value/utility of products
+2. the factors within these models are independent
+3. the weights that consumers assign to these factors are normally distributed.
+
+The seminal model of consumer choice is that proposed by the Nobel Laureate Daniel McFadden. McFadden's 1974 article entitled Conditional Logit Analysis of Qualitative Choice Behavior" assumed that consumer utility values included error terms that were distributed according to the Gumbel distribution.[^McFadden, D.]
+
+The model presented here is similar to Multinomial Probit models in that it assumes that the pairwise preference probability is given by the normal cumulative density function. However, we do not conceptually have error terms in our model.
 
 ## Conclusion
 
@@ -179,7 +201,7 @@ While we have focused on products, the same methods can be used to model demand 
 
 In practice, the primary difficulty using this model, as is often the case, lies in parameterization. Unfortunately, it is not possible to "run the equations backwards" and infer the input variables such as product feature scores from output variables such as market share. In general, there are many different product "configurations" that will produce the same market share divisions. As a result, the methods introduced in this article are best used for qualitative and approximate modeling. Input variables such as product scores, and consumer weights, can be approximated using consumer surveys and expert judgement.
 
-While our primary contribution has been to introduce a mathematically rigorous model of product demand that is theoretically sensible, we also hope that our mathematical solutions to the equations are valuable. While are confident that these equations have been presented and solved in other contexts, we were unable to find solutions to them in our readings. Hence, we hope that this article will make their derivation and proofs easier to find.
+Lastly, we hope that our mathematical solutions to the equations are valuable. While we are confident that these equations have been presented and solved in other contexts, we were unable to find solutions to them in our readings. Hence, we hope that this article will make their derivation and proofs easier to find.
 
 ## Appendix 1: Solving the Choice Equation
 
@@ -189,14 +211,14 @@ $$
 p_{i,j} = \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds
 \end{align}
 $$
-In this section, we will show that (4) equals
+In this section, we will show that (5) equals
 $$
 \begin{align}
 \Phi (\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}}).
 \end{align}
 $$
 
-To prove this equality, we will calculate the Fourier transform for (4) and (5) and show that they are the same.[^3]
+To prove this equality, we will calculate the Fourier transform for (5) and (6) and show that they are the same.[^3]
 
 Recall that the Fourier transform for the Normal Cumulative Density function (CDF) is
 $$
@@ -204,19 +226,19 @@ $$
 k(\xi) := \int \Phi (\frac{x_0 - \mu}{\sigma})\ e^{-2 \pi i \xi x_0} d x_0 = \frac{e^{-2 \pi i \xi \mu} e^{-2(\pi \xi \sigma)^2}}{2 \pi i \xi} + \frac{1}{2}\delta(\xi)
 \end{align}
 $$
-where $\delta$ is the Dirac Delta function. In Appendix 2, we show how we can derive (6). From this equation, we can use the Inverse Fourier Transform to express the Normal CDF as
+where $\delta$ is the Dirac Delta function. In Appendix 2, we show how we can derive (7). From this equation, we can use the Inverse Fourier Transform to express the Normal CDF as
 $$
 \begin{align}
 \Phi (\frac{x_0 - \mu}{\sigma}) = \int \frac{e^{2 \pi i \xi (x_0 - \mu)} e^{-2(\pi \xi \sigma)^2}}{2 \pi i \xi} d \xi + \frac{1}{2}.
 \end{align}
 $$
-From (6) we see that the Inverse Fourier Transform for (4) equals
+From (7) we see that the Inverse Fourier Transform for (5) equals
 $$
 \begin{align}
 \Phi (\frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}}) = \int \frac{e^{2 \pi i \xi (\mu_i - \mu_j)} e^{-2(\pi \xi \sqrt{\sigma_i^2 + \sigma_j^2})^2}}{2 \pi i \xi} d \xi + \frac{1}{2}.
 \end{align}
 $$
-We will show that the Fourier transform for (4) has the same form as (8). Let $k(\xi)$ represent the Fourier transform for $\varphi (\frac{s - \mu_j}{\sigma_j})$ and replace this term in (3) with its Fourier transform:
+We will show that the Fourier transform for (5) has the same form as (9). Let $k(\xi)$ represent the Fourier transform for $\varphi (\frac{s - \mu_j}{\sigma_j})$ and replace this term in (3) with its Fourier transform:
 $$
 \begin{align*}
 p_{i,j} &= \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\frac{s + \delta - \mu_i}{\sigma_i})\ d\delta\ ds\\\\
@@ -232,7 +254,7 @@ p_{i,j} &= \int \int_0^{\infty} \varphi(\frac{s - \mu_j}{\sigma_j})\ \varphi (\f
 &= \int \frac{e^{2 \pi i \xi (\mu_i - \mu_j)}\ e^{-2(\pi \xi \sqrt{\sigma_i^2 + \sigma_j^2})^2}}{2 \pi i \xi} d\xi.
 \end{align*}
 $$
-All that remains is to set the constant of integration, which in this instance is $\frac{1}{2}$. Thus, we see that the Fourier inverse transform for (4) is equivalent to the inverse transform for (5).
+All that remains is to set the constant of integration, which in this instance is $\frac{1}{2}$. Thus, we see that the Fourier inverse transform for (5) is equivalent to the inverse transform for (6).
 
 
 ## Appendix 2: The Fourier Transforms of the Normal PDF and CDF
@@ -281,7 +303,7 @@ $$
 \mathcal{F} (\int_{-\infty}^{x_0} f (x) dx) = \frac{\mathcal{F} (f(x))}{2 \pi i \xi} + c\ \delta(\xi)
 \end{align}
 $$
-Where $\mathcal{F}$ denotes the Fourier Transform operator, $\delta$ represents the Dirac delta function, and $c$ is a constant that depends on $f$. In the standard proof the integral in (10) is represented by a convolution of $f$ and the step-function. We then use the Convolution Property of the Fourier Transform to express the Fourier Transform as the product of the Fourier Transform of $f$ and the step function. The Fourier Transform of the step function reduces to a sum involving the Dirac Delta function. A detailed derivation can be found in [^Bevelacqua, P.].
+Where $\mathcal{F}$ denotes the Fourier Transform operator, $\delta$ represents the Dirac delta function, and $c$ is a constant that depends on $f$. In the standard proof the integral in (11) is represented by a convolution of $f$ and the step-function. We then use the Convolution Property of the Fourier Transform to express the Fourier Transform as the product of the Fourier Transform of $f$ and the step function. The Fourier Transform of the step function reduces to a sum involving the Dirac Delta function. A detailed derivation can be found in [^Bevelacqua, P.].
 
 Applying the Integration Property of the Fourier Transform to the Normal CDF gives
 $$
@@ -293,8 +315,16 @@ $$
 [^1]: In general, preferences will not be independent across feature dimensions. For example, the importance that a consumer assigns to the weight of a product might correlate with the weight that they assign to its size. Thus, in practice, we will typically need to perform factor analysis such as Principal Component Analysis (PCA) to identify a set of independent feature dimensions.
 [^2]: Note that the second argument to $\mathcal{N}$ gives the distribution's variance.
 [^3]: Whenever two functions have identical Fourier transforms, we know that they are equal. 
+[^4]: We can derive a useful approximation for $k_{i,j}$. Let $x_{i,j} := \frac{\mu_i - \mu_j}{\sqrt{\sigma_i^2 + \sigma_j^2}}$ and observe that $x_{i,j} = - x_{j,i}$. Then we can write $k_{i,j}$ as $\frac{\Phi(x_{i,j})}{\Phi(-x_{i,j})}$. When $|x_{i,j}| \le 1$, we can use the third-order Taylor expansion to practically approximate $k_{i,j}$ as:
+$$
+\begin{align*}
+k_{i,j} \approx -\frac{x_{i,j}^3-6x_{i,j}-3\sqrt{2\pi}}{x_{i,j}^3-6x_{i,j}+3\sqrt{2\pi}}\hspace{5em}when\ |x_{i,j}| \le 1.
+	\end{align*}
+$$
+Within this domain, the error is generally less than 7%.
 
 ## References
 
 [^Bevelacqua, P.]: Bevelacqua, P. (n.d.). *The Integration Property of the Fourier Transform*. The Fourier Transform.com. https://www.thefouriertransform.com/transform/integration.php
 [^Soch, J.]: Soch, J. (2021, June 2). Proof: Linear combination of independent normal random variables. The Book of Statistical Proofs. https://statproofbook.github.io/P/norm-lincomb.html 
+[^McFadden, D.]: McFadden, Daniel F. (1974). "Conditional Logit Analysis of Qualitative Choice Behavior" (PDF). Archived (PDF) from the original on 2000-09-30. Retrieved October 25, 2019.
